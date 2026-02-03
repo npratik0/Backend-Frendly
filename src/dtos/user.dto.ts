@@ -6,14 +6,17 @@ export const CreateUserDTO = UserSchema.pick(
         fullName: true,
         phoneNumber: true,
         gender: true,
-        // profilePicture: true,
-        // bio: true,
+        profilePicture: true,
+        bio: true,
         email: true,
         username: true,
-        password: true 
+        password: true,
+        role: true,
+        // dateOfBirth: true, 
+        imageUrl: true,
     }
 ).extend({
-    confirmPassword: z.string().min(6)
+    confirmPassword: z.string().min(6).optional()
 }). refine( // extra validation for confirmPassword
     (data) => data.password === data.confirmPassword,
     {
@@ -28,4 +31,8 @@ export const LoginUserDTO = z.object({
     email : z.email(),
     password: z.string().min(6)
 });
+
 export type LoginUserDTO = z.infer<typeof LoginUserDTO>;
+
+export const UpdateUserDTO = UserSchema.partial(); // all attributes optional
+export type UpdateUserDTO = z.infer<typeof UpdateUserDTO>;
