@@ -44,7 +44,7 @@ export const authorizedMiddleware =
         // return res.status(401).json({success: false, message: "Unauthorized"});
 }
 
-export const  adminOnlyMiddleware = 
+export const  adminMiddleware = 
     async (req: Request, res: Response, next: NextFunction) => {
         try{
             // req.user is set in authorization
