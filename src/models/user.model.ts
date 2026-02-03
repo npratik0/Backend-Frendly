@@ -8,14 +8,18 @@ const UserSchema: Schema =  new Schema<UserType>(
         username: {type: String, required: true, unique: true},
         fullName: {type: String},
         phoneNumber: {type: Number},
+        // phoneNumber: {type: String},
         gender : {type: String, enum: ['male','female','other']},
+        // gender : {type: String},
         profilePicture: {type: String},
         bio: {type: String, maxLength: 160},
+        // dateOfBirth: {type: String},
         role: {
             type: String,
             enum: ['user','admin'],
-            default: 'user',
-        }
+            // default: 'user',
+        },
+        imageUrl: { type: String , required: false},
     },
     {
         timestamps: true, // auto createdAt and updatedAt
