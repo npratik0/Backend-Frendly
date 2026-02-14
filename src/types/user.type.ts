@@ -15,8 +15,8 @@ export const UserSchema = z.object({
 
     profilePicture: z.string().optional(),
     bio: z.string().max(160).optional(),
-    role: z.enum(['user', 'admin']),
-    // role: z.enum(['user', 'admin']).default('user'),
+    // role: z.enum(['user', 'admin']),
+    role: z.enum(['user', 'admin']).default('user'),
     // terms: z.boolean().refine((val) => val === true, {
     // message: "You must accept the terms",
     // }),
