@@ -5,12 +5,12 @@ export const UserSchema = z.object({
     password: z.string().min(5),
     username: z.string().min(3).max(30),
     fullName: z.string().optional(),
-    phoneNumber: z.int(),
-    // phoneNumber: z.string(),
-    gender: z.enum(['male', 'female', 'other']),
-    // gender: z.string(),
-    // // additional fields
-    // dateOfBirth: z.string().optional(),
+    // phoneNumber: z.int(),
+    phoneNumber: z.string(),
+    // gender: z.enum(['male', 'female', 'other']),
+    gender: z.string(),
+    // additional fields
+    dateOfBirth: z.string().optional(),
 
 
     profilePicture: z.string().optional(),
