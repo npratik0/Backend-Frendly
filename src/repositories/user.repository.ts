@@ -7,10 +7,10 @@ export interface IUserRepository {
     getUserByUsername(Username: string): Promise<IUser |null>;
     // Additional
     getUserById(id: string): Promise<IUser | null>;
-    getAllUsers() : Promise<IUser[]>;
-    //  getAllUsers(
-    //     page: number, size: number, search?: string
-    // ): Promise<{users: IUser[], total: number}>;
+    // getAllUsers() : Promise<IUser[]>;
+     getAllUsers(
+        page: number, size: number, search?: string
+    ): Promise<{users: IUser[], total: number}>;
     updateUser(id: string, updateData: Partial<IUser>): Promise<IUser | null>;
     deleteUser(id: string): Promise<boolean>;
 }
@@ -33,31 +33,31 @@ export class UserRepository implements IUserRepository {
         const user = await UserModel.findById(id);
         return user;
     }
-    async getAllUsers(): Promise<IUser[]> {
-        const users = await UserModel.find();
-        return users;
-    }
-
-    // async getAllUsers(
-    //     page: number, size: number, search?: string
-    // ): Promise<{users: IUser[], total: number}> {
-    //     const filter: QueryFilter<IUser> = {};
-    //     if (search) {
-    //         filter.$or = [
-    //             { username: { $regex: search, $options: 'i' } },
-    //             { email: { $regex: search, $options: 'i' } },
-    //             { firstName: { $regex: search, $options: 'i' } },
-    //             { lastName: { $regex: search, $options: 'i' } },
-    //         ];
-    //     }
-    //     const [users, total] = await Promise.all([
-    //         UserModel.find(filter)
-    //             .skip((page - 1) * size)
-    //             .limit(size),
-    //         UserModel.countDocuments(filter)
-    //     ]);
-    //     return { users, total };
+    // async getAllUsers(): Promise<IUser[]> {
+    //     const users = await UserModel.find();
+    //     return users;
     // }
+
+    async getAllUsers(
+        page: number, size: number, search?: string
+    ): Promise<{users: IUser[], total: number}> {
+        const filter: QueryFilter<IUser> = {};
+        if (search) {
+            filter.$or = [
+                { username: { $regex: search, $options: 'i' } },
+                { email: { $regex: search, $options: 'i' } },
+                { firstName: { $regex: search, $options: 'i' } },
+                { lastName: { $regex: search, $options: 'i' } },
+            ];
+        }
+        const [users, total] = await Promise.all([
+            UserModel.find(filter)
+                .skip((page - 1) * size)
+                .limit(size),
+            UserModel.countDocuments(filter)
+        ]);
+        return { users, total };
+    }
 
 
     async updateUser(id: string, updateData: Partial<IUser>): Promise<IUser | null> {
@@ -72,5 +72,62 @@ export class UserRepository implements IUserRepository {
         const result = await UserModel.findByIdAndDelete(id);
         return result ? true : false;
     }
+
+
+    async findById(userId: string): Promise<IUser | null> {
+    return await UserModel.findById(userId)
+      .populate('followers', 'username fullName profilePicture')
+      .populate('following', 'username fullName profilePicture');
+  }
+
+  async searchUsers(query: string, limit: number = 10): Promise<IUser[]> {
+    return await UserModel.find({
+      $or: [
+        { username: { $regex: query, $options: 'i' } },
+        { fullName: { $regex: query, $options: 'i' } }
+      ]
+    })
+      .limit(limit)
+      .select('username fullName profilePicture bio');
+  }
+
+  async followUser(userId: string, targetUserId: string): Promise<void> {
+    await UserModel.findByIdAndUpdate(userId, {
+      $addToSet: { following: targetUserId }
+    });
+    await UserModel.findByIdAndUpdate(targetUserId, {
+      $addToSet: { followers: userId }
+    });
+  }
+
+  async unfollowUser(userId: string, targetUserId: string): Promise<void> {
+    await UserModel.findByIdAndUpdate(userId, {
+      $pull: { following: targetUserId }
+    });
+    await UserModel.findByIdAndUpdate(targetUserId, {
+      $pull: { followers: userId }
+    });
+  }
+
+  async savePost(userId: string, postId: string): Promise<IUser | null> {
+    return await UserModel.findByIdAndUpdate(
+      userId,
+      { $addToSet: { savedPosts: postId } },
+      { new: true }
+    );
+  }
+
+  async unsavePost(userId: string, postId: string): Promise<IUser | null> {
+    return await UserModel.findByIdAndUpdate(
+      userId,
+      { $pull: { savedPosts: postId } },
+      { new: true }
+    );
+  }
+
+  async getSavedPosts(userId: string): Promise<string[]> {
+    const user = await UserModel.findById(userId).select('savedPosts');
+    return user?.savedPosts.map(id => id.toString()) || [];
+  }
 }
 

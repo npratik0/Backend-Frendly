@@ -30,11 +30,28 @@ export class AdminUserController {
         }
     }
 
-    async getAllUsers(req: Request, res: Response, next: NextFunction) {
+    // async getAllUsers(req: Request, res: Response, next: NextFunction) {
+    //     try {
+    //         const users = await adminUserService.getAllUsers();
+    //         return res.status(200).json(
+    //             { success: true, data: users, message: "All Users Retrieved" }
+    //         );
+    //     } catch (error: Error | any) {
+    //         return res.status(error.statusCode ?? 500).json(
+    //             { success: false, message: error.message || "Internal Server Error" }
+    //         );
+    //     }
+    // }
+
+
+     async getAllUsers(req: Request, res: Response, next: NextFunction) {
         try {
-            const users = await adminUserService.getAllUsers();
+            const { page, size, search }: QueryParams = req.query;
+            const { users, pagination } = await adminUserService.getAllUsers(
+                page, size, search
+            );
             return res.status(200).json(
-                { success: true, data: users, message: "All Users Retrieved" }
+                { success: true, data: users, pagination: pagination, message: "All Users Retrieved" }
             );
         } catch (error: Error | any) {
             return res.status(error.statusCode ?? 500).json(
