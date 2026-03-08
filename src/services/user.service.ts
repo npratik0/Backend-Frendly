@@ -58,7 +58,7 @@ export class UserService {
             username: user.username,
             fullName: user.fullName,
             phoneNumber: user.phoneNumber,
-            // dateOfBirth: user.dateOfBirth,
+            dateOfBirth: user.dateOfBirth,
             role: user.role 
         }
         const token = jwt.sign(payload, JWT_SECRET, {expiresIn: '30d'});

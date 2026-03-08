@@ -12,7 +12,7 @@ export const CreateUserDTO = UserSchema.pick(
         username: true,
         password: true,
         role: true,
-        // dateOfBirth: true, 
+        dateOfBirth: true, 
         imageUrl: true,
     }
 ).extend({
