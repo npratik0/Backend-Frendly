@@ -1,5 +1,3 @@
-// src/errors/custom-errors.ts
-
 export class NotFoundError extends Error {
   statusCode: number;
 

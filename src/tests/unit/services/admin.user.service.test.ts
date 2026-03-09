@@ -25,13 +25,6 @@ describe("AdminUserService", () => {
     service = new AdminUserService(mockRepo);
   });
 
-  // const mockUser = {
-  //   _id: "mockId",
-  //   email: "admin@test.com",
-  //   username: "adminuser",
-  //   password: "123456"
-  // };
-
   const mockUser = {
   _id: new mongoose.Types.ObjectId(),
   email: "admin@test.com",
@@ -87,9 +80,9 @@ describe("AdminUserService", () => {
     expect(result.users.length).toBe(1);
   });
 
-  // =============================
+  
   // DELETE USER
-  // =============================
+  
 
   it("should delete user successfully", async () => {
     mockRepo.getUserById.mockResolvedValue(mockUser as any);

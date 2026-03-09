@@ -1,36 +1,3 @@
-// import { Router } from "express";
-// import { PostController } from "../controllers/post.controller";
-// // import { authenticateToken } from "../middlewares/auth.middleware";
-// import { authenticateToken } from "../middlewares/auth.middleware";
-
-// const router = Router();
-// const postController = new PostController();
-
-// // All routes require authentication
-// router.use(authenticateToken);
-
-// // Create post
-// router.post("/", postController.createPost);
-
-// // Get feed
-// router.get("/feed", postController.getFeed);
-
-// // Get user posts
-// router.get("/user/:userId", postController.getUserPosts);
-
-// // Like/Unlike post
-// router.post("/:postId/like", postController.likePost);
-
-// // Add comment
-// router.post("/:postId/comment", postController.addComment);
-
-// // Delete post
-// router.delete("/:postId", postController.deletePost);
-
-// export default router;
-
-
-
 import { Router } from "express";
 import { PostController } from "../controllers/post.controller";
 import { authenticateToken } from "../middlewares/auth.middleware";

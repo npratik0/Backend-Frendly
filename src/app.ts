@@ -6,8 +6,6 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import path from 'path';
 
-// import { connectDatabase } from "./database/mongodb";
-// import { PORT } from "./config";
 
 import authRoutes from "./routes/auth.routes";
 import adminUserRoutes from "./routes/admin/user.routes";
@@ -28,8 +26,6 @@ app.use(
   })
 );
 
-// // Handle preflight requests
-// app.options("*", cors());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -56,23 +52,6 @@ app.get("/health", (req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
-// async function startServer() {
-//   try {
-//     await connectDatabase(); 
-//     console.log("Mongoose readyState:", mongoose.connection.readyState);
-
-//     app.listen(PORT, () => {
-//       console.log(`Server running at http://localhost:${PORT}`);
-//     });
-//   } catch (error) {
-//     console.error("Server startup failed:", error);
-//     process.exit(1);
-//   }
-// }
-
-// startServer();
-
-// Add this before export default app
 app.get("/socket-test", (req, res) => {
   res.json({
     message: "Server is running, socket connection is enabled",
